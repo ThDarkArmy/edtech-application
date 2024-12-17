@@ -1,10 +1,14 @@
 package com.firstproject.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Course {
@@ -16,6 +20,10 @@ public class Course {
     private String duration;
     private Double price;
 
+    @JsonIgnore
+    @ManyToMany(mappedBy = "courses")
+    private List<Student> students = new ArrayList<>();
+
     public Course() {
     }
 
@@ -24,6 +32,14 @@ public class Course {
         this.name = name;
         this.duration = duration;
         this.price = price;
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
     }
 
     public Long getCourseId() {

@@ -1,5 +1,6 @@
 package com.firstproject.demo.controller;
 
+import com.firstproject.demo.dto.EnrollCourseDto;
 import com.firstproject.demo.model.Course;
 import com.firstproject.demo.service.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,12 @@ public class CourseController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id){
         return status(200).body(courseService.deleteById(id));
+    }
+
+
+    @PostMapping("/enroll-course")
+    public ResponseEntity<?> enroll(@RequestBody EnrollCourseDto enrollCourseDto){
+        return status(201).body(courseService.enrollCourse(enrollCourseDto));
     }
 
 }
