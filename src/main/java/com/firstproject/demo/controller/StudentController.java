@@ -4,6 +4,7 @@ package com.firstproject.demo.controller;
 import com.firstproject.demo.dto.StudentDto;
 import com.firstproject.demo.model.Student;
 import com.firstproject.demo.service.StudentService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class StudentController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> add(@RequestBody StudentDto studentDto){
+    public ResponseEntity<?> add(@Valid @RequestBody StudentDto studentDto){
         return status(HttpStatus.CREATED).body(studentService.add(studentDto));
     }
 

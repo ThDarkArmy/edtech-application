@@ -1,8 +1,18 @@
 package com.firstproject.demo.dto;
 
+import jakarta.validation.constraints.*;
+
 public class StudentDto {
+
+    @NotEmpty(message = "Name must not be empty")
+    @Size(min = 5, max = 20, message = "Name must be between 5 and 20")
     private String name;
+
+    @Min(value = 4, message = "Minimum age must be 4")
+    @Max(value = 35, message = "Maximum age must be 35")
     private int age;
+
+    @NotNull(message = "Teacher id should not be null")
     private Long teacherId;
 
     public StudentDto() {
