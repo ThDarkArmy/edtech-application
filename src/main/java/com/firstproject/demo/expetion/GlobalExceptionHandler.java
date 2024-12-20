@@ -31,6 +31,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorMessageDetails(HttpStatus.BAD_REQUEST.value(), "Binding Error", error));
     }
 
+    @ExceptionHandler(UserAlreadyExistsException.class)
+    public ResponseEntity<?> handleUserAlreadyExistsException(UserAlreadyExistsException exception){
+        return status(HttpStatus.BAD_REQUEST).body(new ErrorMessageDetails(HttpStatus.BAD_REQUEST.value(), exception.getLocalizedMessage(), null));
+    }
+
     // Other exceptions
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleAllOtherExceptions(Exception exception){
