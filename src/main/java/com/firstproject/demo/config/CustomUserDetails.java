@@ -2,9 +2,12 @@ package com.firstproject.demo.config;
 
 import com.firstproject.demo.model.User;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class CustomUserDetails implements UserDetails {
 
@@ -16,7 +19,10 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+        GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_"+user.getRole());
+        grantedAuthorities.add(grantedAuthority);
+        return grantedAuthorities;
     }
 
     @Override

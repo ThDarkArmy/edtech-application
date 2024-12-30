@@ -36,6 +36,11 @@ public class GlobalExceptionHandler {
         return status(HttpStatus.BAD_REQUEST).body(new ErrorMessageDetails(HttpStatus.BAD_REQUEST.value(), exception.getLocalizedMessage(), null));
     }
 
+    @ExceptionHandler(TokenExpiredException.class)
+    public ResponseEntity<?> handleTokenExpiredException(TokenExpiredException exception){
+        return status(HttpStatus.BAD_REQUEST).body(new ErrorMessageDetails(HttpStatus.FORBIDDEN.value(), exception.getLocalizedMessage(), null));
+    }
+
     // Other exceptions
     @ExceptionHandler(Exception.class)
     public ResponseEntity<?> handleAllOtherExceptions(Exception exception){
