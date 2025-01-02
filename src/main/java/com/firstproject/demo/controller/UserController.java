@@ -2,8 +2,10 @@ package com.firstproject.demo.controller;
 
 import com.firstproject.demo.dto.LoginRequest;
 import com.firstproject.demo.dto.LoginResponse;
+import com.firstproject.demo.dto.MailBodyDto;
 import com.firstproject.demo.model.User;
 import com.firstproject.demo.service.UserService;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,5 +49,10 @@ public class UserController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> delete(@PathVariable Long id){
         return status(200).body(userService.delete(id));
+    }
+
+    @PostMapping("/send-mail")
+    public ResponseEntity<?> sendMail(@RequestBody MailBodyDto mailBodyDto) throws MessagingException {
+        return status(200).body(userService.sendMail(mailBodyDto));
     }
 }

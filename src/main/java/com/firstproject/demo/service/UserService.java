@@ -3,10 +3,12 @@ package com.firstproject.demo.service;
 import com.firstproject.demo.config.JwtTokenProvider;
 import com.firstproject.demo.dto.LoginRequest;
 import com.firstproject.demo.dto.LoginResponse;
+import com.firstproject.demo.dto.MailBodyDto;
 import com.firstproject.demo.expetion.ResourceNotFoundException;
 import com.firstproject.demo.expetion.UserAlreadyExistsException;
 import com.firstproject.demo.model.User;
 import com.firstproject.demo.repository.UserRepository;
+import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,6 +35,9 @@ public class UserService {
 
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
+
+    @Autowired
+    private MailSenderService mailSenderService;
 
     public List<User> getAll(){
         return userRepository.findAll();
@@ -69,5 +74,10 @@ public class UserService {
         userRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("User not found"));
         userRepository.deleteById(id);
         return "User deleted successfully";
+    }
+
+    public Object sendMail(MailBodyDto mailBodyDto) throws MessagingException {
+        mailSenderService.sendMail(mailBodyDto.getEmail(), mailBodyDto.getSubject(), mailBodyDto.getMailBody());
+        return "Email sent successfully";
     }
 }
