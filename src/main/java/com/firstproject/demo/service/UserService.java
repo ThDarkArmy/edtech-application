@@ -1,9 +1,11 @@
 package com.firstproject.demo.service;
 
+import ch.qos.logback.core.util.StringUtil;
 import com.firstproject.demo.config.JwtTokenProvider;
 import com.firstproject.demo.dto.LoginRequest;
 import com.firstproject.demo.dto.LoginResponse;
 import com.firstproject.demo.dto.MailBodyDto;
+import com.firstproject.demo.dto.UserDto;
 import com.firstproject.demo.expetion.ResourceNotFoundException;
 import com.firstproject.demo.expetion.UserAlreadyExistsException;
 import com.firstproject.demo.model.User;
@@ -17,12 +19,31 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserService {
+
+    private static String BASE_URL = "http://localhost:8000";
+
+    private Path fileStoragePath;
+
+    public UserService() {
+        try{
+            fileStoragePath = Paths.get("src\\main\\resources\\static\\fileStorage");
+            Files.createDirectories(fileStoragePath);
+        }catch(IOException exception){
+            throw new RuntimeException("Issue in creating directory");
+        }
+    }
 
     @Autowired
     private UserRepository userRepository;
@@ -47,11 +68,32 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("User not found"));
     }
 
-    public User signUp(User user){
+    public User signUp(UserDto userDto){
         // TODO: update this method
-        Optional<User> userOptional = userRepository.findByEmail(user.getEmail());
+        Optional<User> userOptional = userRepository.findByEmail(userDto.getEmail());
         if(userOptional.isPresent()) throw new UserAlreadyExistsException("User with given email already exists");
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+
+        // file uploading
+        String fileName = StringUtils.cleanPath(userDto.getProfilePicture().getOriginalFilename());
+        fileName = fileName.replace(" ", "");
+
+        Path filePath = Paths.get(fileStoragePath+"\\"+fileName);
+
+        try{
+            Files.copy(userDto.getProfilePicture().getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+        }catch(IOException exception){
+            exception.printStackTrace();
+            throw new RuntimeException("issue in uploading file");
+        }
+
+        User user = new User();
+        user.setName(userDto.getName());
+        user.setEmail(userDto.getEmail());
+        user.setContactNumber(userDto.getContactNumber());
+        user.setRole(userDto.getRole());
+        user.setProfilePicUrl(BASE_URL+"/fileStorage/"+fileName);
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         return userRepository.save(user);
     }
 

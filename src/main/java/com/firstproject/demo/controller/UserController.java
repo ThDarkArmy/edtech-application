@@ -3,11 +3,13 @@ package com.firstproject.demo.controller;
 import com.firstproject.demo.dto.LoginRequest;
 import com.firstproject.demo.dto.LoginResponse;
 import com.firstproject.demo.dto.MailBodyDto;
+import com.firstproject.demo.dto.UserDto;
 import com.firstproject.demo.model.User;
 import com.firstproject.demo.service.UserService;
 import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,8 +34,8 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<User> signup(@RequestBody User user){
-        return status(201).body(userService.signUp(user));
+    public ResponseEntity<User> signup(@ModelAttribute UserDto userDto){
+        return status(201).body(userService.signUp(userDto));
     }
 
     @PostMapping("/login")

@@ -1,48 +1,26 @@
-package com.firstproject.demo.model;
+package com.firstproject.demo.dto;
 
-import jakarta.persistence.*;
+import org.springframework.web.multipart.MultipartFile;
 
-@Entity
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class UserDto {
     private String name;
-    @Column(unique = true)
     private String email;
     private String contactNumber;
     private String role;
     private String password;
 
-    private String profilePicUrl;
+    private MultipartFile profilePicture;
 
-    public User() {
+    public UserDto() {
     }
 
-    public User(Long id, String name, String email, String contactNumber, String role, String password) {
-        this.id = id;
+    public UserDto(String name, String email, String contactNumber, String role, String password, MultipartFile profilePicture) {
         this.name = name;
         this.email = email;
         this.contactNumber = contactNumber;
         this.role = role;
         this.password = password;
-    }
-
-    public String getProfilePicUrl() {
-        return profilePicUrl;
-    }
-
-    public void setProfilePicUrl(String profilePicUrl) {
-        this.profilePicUrl = profilePicUrl;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+        this.profilePicture = profilePicture;
     }
 
     public String getName() {
@@ -85,15 +63,23 @@ public class User {
         this.password = password;
     }
 
+    public MultipartFile getProfilePicture() {
+        return profilePicture;
+    }
+
+    public void setProfilePicture(MultipartFile profilePicture) {
+        this.profilePicture = profilePicture;
+    }
+
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
+        return "UserDto{" +
+                "name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", contactNumber='" + contactNumber + '\'' +
                 ", role='" + role + '\'' +
                 ", password='" + password + '\'' +
+                ", profilePicture=" + profilePicture +
                 '}';
     }
 }
