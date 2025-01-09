@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.springframework.http.ResponseEntity.status;
@@ -34,7 +35,7 @@ public class UserController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<User> signup(@ModelAttribute UserDto userDto){
+    public ResponseEntity<User> signup(@ModelAttribute UserDto userDto) throws IOException {
         return status(201).body(userService.signUp(userDto));
     }
 

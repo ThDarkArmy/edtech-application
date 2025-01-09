@@ -60,6 +60,9 @@ public class UserService {
     @Autowired
     private MailSenderService mailSenderService;
 
+    @Autowired
+    private S3Service s3Service;
+
     public List<User> getAll(){
         return userRepository.findAll();
     }
@@ -68,7 +71,7 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("User not found"));
     }
 
-    public User signUp(UserDto userDto){
+    public User signUp(UserDto userDto) throws IOException {
         // TODO: update this method
         Optional<User> userOptional = userRepository.findByEmail(userDto.getEmail());
         if(userOptional.isPresent()) throw new UserAlreadyExistsException("User with given email already exists");
@@ -87,12 +90,13 @@ public class UserService {
             throw new RuntimeException("issue in uploading file");
         }
 
+        String url = s3Service.uploadFile(userDto.getProfilePicture());
         User user = new User();
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
         user.setContactNumber(userDto.getContactNumber());
         user.setRole(userDto.getRole());
-        user.setProfilePicUrl(BASE_URL+"/fileStorage/"+fileName);
+        user.setProfilePicUrl(url);
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         return userRepository.save(user);
     }
