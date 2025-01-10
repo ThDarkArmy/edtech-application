@@ -60,8 +60,8 @@ public class UserService {
     @Autowired
     private MailSenderService mailSenderService;
 
-    @Autowired
-    private S3Service s3Service;
+//    @Autowired
+//    private S3Service s3Service;
 
     public List<User> getAll(){
         return userRepository.findAll();
@@ -90,7 +90,7 @@ public class UserService {
             throw new RuntimeException("issue in uploading file");
         }
 
-        String url = s3Service.uploadFile(userDto.getProfilePicture());
+        String url = "";//s3Service.uploadFile(userDto.getProfilePicture());
         User user = new User();
         user.setName(userDto.getName());
         user.setEmail(userDto.getEmail());
