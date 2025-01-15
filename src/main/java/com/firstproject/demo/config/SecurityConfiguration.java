@@ -31,7 +31,7 @@ public class SecurityConfiguration {
                 .cors()
                 .and()
                 .authorizeRequests()
-                .requestMatchers("/users/login", "/users/signup", "/fileStorage/**")
+                .requestMatchers("/users/login", "/users/signup", "/fileStorage/**", "/courses/**")
                 .permitAll()
                 .requestMatchers("/admin/**").hasAnyRole("ADMIN")
                 .requestMatchers("/security-persons/**").hasAnyRole("SECURITY_PERSON")

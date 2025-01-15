@@ -28,6 +28,8 @@ public class CourseController {
 
     @PostMapping("/save")
     public ResponseEntity<?> save(@RequestBody Course course){
+
+        System.out.println("Course: "+course.toString());
         return status(201).body(courseService.save(course));
     }
 
