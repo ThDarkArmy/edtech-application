@@ -19,6 +19,7 @@ import static org.springframework.http.ResponseEntity.status;
 
 @RestController
 @RequestMapping("/users")
+@CrossOrigin(allowedHeaders = "*" , origins = "*")
 public class UserController {
 
     @Autowired
